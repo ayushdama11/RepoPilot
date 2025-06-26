@@ -8,6 +8,7 @@ import {
   SignedOut,
   UserButton,
   SignInButton,
+  SignUp,
 } from "@clerk/clerk-react";
 import { Route, Routes } from "react-router-dom";
 import { SignUpComponent } from "./MyComponents/Login/SignUpComponent";
@@ -68,7 +69,7 @@ function App() {
           }
           ></Route>
 
-        <Route path="/signup" element={<SignUpComponent />}></Route>
+        <Route path="/signup/*" element={<SignUpComponent />}></Route>
         <Route path="/signin/*" element={<SignInComponent />}></Route>
 
         <Route
