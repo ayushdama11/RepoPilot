@@ -1,6 +1,7 @@
 import prisma from "../prismaClient.js";
 
 const syncUser = async (req, res) => {
+    console.log('Received body:', req.body);
     const { userId, emailAddress, firstName, lastName, imageUrl } = req.body;
 
     try {

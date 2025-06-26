@@ -34,6 +34,13 @@ const SyncUser=()=>{
                 const source = axios.CancelToken.source();
                 const timeout = setTimeout(() => source.cancel("Request timed out"), 10000);
                 try{
+                    console.log('Syncing user:', {
+                        userId: user.id,
+                        emailAddress: user.emailAddresses[0]?.emailAddress,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        imageUrl: user.imageUrl
+                    });
                     await axios.post(`${API_BASEURL}/sync-user`,{
                         userId:user.id,
                         emailAddress:user.emailAddresses[0]?.emailAddress,
