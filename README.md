@@ -28,7 +28,7 @@ Repo-Pilot is an AI-powered developer collaboration platform designed to simplif
 ### Motivation/Need of Project  
 Repo-Pilot was developed to address key challenges in software development collaboration:  
 - **Enhancing Repository Transparency:** Understanding a large codebase can be overwhelming, especially for new contributors. Repo-Pilot automates documentation to bridge this gap.  
-- **Improving Code Search Efficiency:** Traditional code search tools often fail to capture contextual relevance. Repo-Pilot’s AI-powered search improves accuracy.  
+- **Improving Code Search Efficiency:** Traditional code search tools often fail to capture contextual relevance. Repo-Pilot's AI-powered search improves accuracy.  
 - **Summarizing Commit History:** Keeping track of repository changes manually is tedious. Repo-Pilot automates this process with AI-driven commit summaries.  
 - **Integrating AI for Better Collaboration:** Leveraging AI to assist developers in navigating repositories, understanding code, and improving productivity.  
 

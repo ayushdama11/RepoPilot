@@ -15,10 +15,12 @@ import {
 } from "@/components/ui/sidebar";
 import useProject from "@/hooks/use-project";
 import clsx from "clsx";
-import { Bot, CreditCard, LayoutDashboard, Plus, Presentation } from "lucide-react";
+import { Bot, CreditCard, LayoutDashboard, Plus, Presentation, Trash } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { QueryClient } from "@tanstack/react-query";
 import { useSelectedProjectContext } from "@/hooks/selectProjectProvider";
+import { toast } from "react-toastify";
+import { useAuth } from "@clerk/clerk-react";
 
 function AppSidebarComponent() {
 
@@ -41,11 +43,38 @@ function AppSidebarComponent() {
 
     ]
 
-    const {projects}=useProject();
+    const {projects, refetch} = useProject();
     const queryClient=new QueryClient();
     const { selectedProjectId,setProjectId } = useSelectedProjectContext();
+    const { getToken } = useAuth();
 
-   
+    const deleteProject = async (projectId, projectName) => {
+      if(window.confirm(`Are you sure you want to permanently delete the project '${projectName}'? This action cannot be undone.`)) {
+        try {
+          console.log("Deleting project:", projectId, projectName);
+          const token = await getToken();
+          console.log("Token:", token);
+          const response = await fetch(`${import.meta.env.VITE_BACKEND_API_BASEURL}/deleteproject/${projectId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await response.json();
+          console.log("Delete response:", response.status, data);
+          if (response.ok) {
+            toast.success(`Project '${projectName}' deleted!`);
+            refetch();
+            window.location.reload();
+          } else {
+            toast.error('Failed to delete project!');
+          }
+        } catch (err) {
+          toast.error('Failed to delete project!');
+        }
+      }
+    };
 
   return (
     <div>
@@ -92,18 +121,24 @@ function AppSidebarComponent() {
               <SidebarMenu>{
                 projects?.map(project=>{
                   return(
-                    <SidebarMenuItem key={project.name}>
+                    <SidebarMenuItem key={project.id}>
                       <SidebarMenuButton asChild>
-                        <div onClick={() => setProjectId(project.id)}>
+                        <div className="flex items-center justify-between w-full" onClick={() => setProjectId(project.id)}>
                           <div className={clsx(
                             'rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary',{
                               '!bg-primary !text-white' : project.id ===selectedProjectId
                             }
                           )}>
                             {project.name[0]}
-
                           </div>
-                          <span>{project.name}</span>
+                          <span className="flex-1 ml-2">{project.name}</span>
+                          <button
+                            className="ml-2 p-1 hover:bg-red-100 rounded"
+                            onClick={e => { e.stopPropagation(); deleteProject(project.id, project.name); }}
+                            title="Delete project"
+                          >
+                            <Trash size={16} className="text-red-500" />
+                          </button>
                         </div>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

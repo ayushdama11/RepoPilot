@@ -101,6 +101,7 @@ model Question{
   userId String
   user User @relation(fields:[userId],references:[clerkId])
 }
+
 model Commit {
   id String @id @default(cuid())
   createdAt DateTime @default(now())
@@ -114,6 +115,5 @@ model Commit {
   commitAuthorName String
   commitAuthorAvatar String
   commitDate DateTime
-
   summary String
 }

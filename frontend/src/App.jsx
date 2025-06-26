@@ -69,7 +69,7 @@ function App() {
           ></Route>
 
         <Route path="/signup" element={<SignUpComponent />}></Route>
-        <Route path="/signin" element={<SignInComponent />}></Route>
+        <Route path="/signin/*" element={<SignInComponent />}></Route>
 
         <Route
           path="/sync-user"

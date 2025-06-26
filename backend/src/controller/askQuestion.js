@@ -18,7 +18,6 @@ export const askQuestion = async (req, res) => {
         //     ORDER BY similarity DESC
         //     LIMIT 10;
         // `, JSON.stringify(vectorQuery), projectId);
-        
         const result = await prisma.$queryRawUnsafe(`
             SELECT "fileName", "sourceCode", "summary",
             1 - ("summaryEmbedding" <=> $1::vector) AS similarity

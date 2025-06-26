@@ -74,47 +74,47 @@ const saveAnswer=async (outputPassed,fileReferencesPassed)=>{
     if(result.status===200){
         toast.success("Answer Saved!")
         setSaved(prev=> !prev) //just to rerender
-        
     }
-
-}
-catch(error){
-    console.error(error);
-    toast.error('Failed to save answer!')
-}
+    }
+    catch(error){
+        console.error(error);
+        toast.error('Failed to save answer!')
+    }
 }
 
 const handleSave=async(outputPassed,fileReferencesPassed)=>{
-await saveAnswer(outputPassed,fileReferencesPassed);
+    await saveAnswer(outputPassed,fileReferencesPassed);
 }
 //contitnue
     return (
         <>
      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className='sm:max-w-[80vw]'>
-        <DialogHeader>
-            <div className="flex items-center gap-2">
+        <DialogContent className='sm:max-w-[80vw] flex flex-col h-[80vh] p-0'>
+            {/* Sticky Header */}
+            <div className="flex items-center justify-between gap-2 p-4 border-b bg-background sticky top-0 z-10">
                 <DialogTitle>
                     <img src='logo.png'  alt='Repo-Pilot' width={40} height={40}/>
                 </DialogTitle>
-        <Button variant={'outline'} onClick={()=>{
-            
-            handleSave(output,fileReferences)}}> Save Answer</Button>
+                <Button variant={'outline'} onClick={()=>{handleSave(output,fileReferences)}}> Save Answer</Button>
+            </div>
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto p-4 bg-background">
+                <div className="rounded-lg bg-gray-900 text-gray-100 p-4">
+                  <MDEditor.Markdown source={output} className="max-w-[70vw] !h-full min-h-[10vh]" />
                 </div>
-            </DialogHeader>
-            <MDEditor.Markdown source={output} className="max-w-[70vw] !h-full max-h-[40vh] overflow-scroll"/>
-            <div className="h-4"></div>
-            {fileReferences && fileReferences.length > 0 && <CodeReferences filesReferences={fileReferences} />}
-
-
-            <Button type='button' onClick={()=>{setOpen(false)}}>
-                Close
-            </Button>
-           
+                <div className="h-4"></div>
+                {fileReferences && fileReferences.length > 0 && <CodeReferences filesReferences={fileReferences} />}
+            </div>
+            {/* Footer always at bottom */}
+            <div className="flex justify-end gap-2 p-4 border-t bg-background mt-auto">
+                <Button type='button' onClick={()=>{setOpen(false)}}>
+                    Close
+                </Button>
+            </div>
         </DialogContent>
            
      </Dialog>
-        <Card className='relative col-span-3'>
+        <Card className='relative col-span-3 mb-8'>
             <CardHeader>
                 <CardTitle>Ask a question</CardTitle>
             </CardHeader>

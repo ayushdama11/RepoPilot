@@ -18,7 +18,7 @@ const QaComponent=()=>{
     const [questions,setQuestions]=useState([]);
     const [questionIndx,setQuestionIndex]=useState(0);
     const question=questions?.[questionIndx];
-console.log("Uppar wala: ",questions);
+// console.log("Uppar wala: ",questions);
 const formattedDate = question?.createdAt
     ? new Date(question?.createdAt).toLocaleDateString("en-US", {
         year: "numeric",

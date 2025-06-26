@@ -1,24 +1,26 @@
-import { SignedIn,useAuth,UserButton } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import { SignIn } from "@clerk/clerk-react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export function SignInComponent(){
-    
+export function SignInComponent() {
+  const { isSignedIn } = useUser();
+  const navigate = useNavigate();
 
-    return (
-        <div>
-        <SignedIn>
-             <UserButton />
-        </SignedIn>
-        
-            <SignIn
-            path="/signin" 
-            routing="path" 
-            forceRedirectUrl="/sync-user"
-            signUpUrl="/signup"/>
-            
-        </div>
-    )
+  useEffect(() => {
+    if (isSignedIn) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isSignedIn, navigate]);
 
+  if (isSignedIn) {
+    return null; // Or a loading spinner
+  }
+
+  return (
+    <div>
+      <SignIn path="/signin" routing="path" signUpUrl="/signup" afterSignInUrl="/dashboard" />
+    </div>
+  );
 }
 

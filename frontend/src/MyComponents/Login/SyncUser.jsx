@@ -1,16 +1,19 @@
-
 import { useAuth, useUser } from "@clerk/clerk-react"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Navigate, redirect } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 const API_BASEURL=import.meta.env.VITE_BACKEND_API_BASEURL;
 
 const SyncUser=()=>{
     const navigate = useNavigate();
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const redirectUrl = params.get("redirect_url") || "/dashboard";
     const [status,setStatus]=useState('syncing user data')
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     // console.log('redirected by signin');
     
     const {isSignedIn,user}=useUser();
@@ -26,10 +29,13 @@ const SyncUser=()=>{
     useEffect(()=>{
         if(isSignedIn && user){
             const syncUser=async()=>{
+                setLoading(true);
+                setError(null);
+                const source = axios.CancelToken.source();
+                const timeout = setTimeout(() => source.cancel("Request timed out"), 10000);
                 try{
-                    // const token= await getToken();
                     await axios.post(`${API_BASEURL}/sync-user`,{
-                        userId:userId,
+                        userId:user.id,
                         emailAddress:user.emailAddresses[0]?.emailAddress,
                         firstName:user.firstName,
                         lastName:user.lastName,
@@ -38,33 +44,32 @@ const SyncUser=()=>{
                     {
                         headers:{
                             "Content-Type":"application/json"
-                         }
+                        },
+                        cancelToken: source.token
                     }
                 );
-                
-                   
-                   navigate('/dashboard');
-
-                  
+                    clearTimeout(timeout);
+                    setLoading(false);
+                    navigate(redirectUrl, { replace: true });
                 }
                 catch(error){
-                    console.error('Error Syncing user: ',error);
-                    setStatus(`Error: ${error.message}`);
+                    clearTimeout(timeout);
+                    setLoading(false);
+                    setError(error.message || "Failed to sync user");
                 }
             };
-
             syncUser();
-            
         }
         else{
             setStatus('Not signed in. Redirecting to sign-in...');
+            setLoading(false);
             navigate('/signin');
         }
+    },[isSignedIn,user]);
 
-
-  },[isSignedIn,user]);
-
-  return <div>{status}</div>
+    if (loading) return <div>Syncing user data...</div>;
+    if (error) return <div>Error: {error} <button onClick={() => window.location.reload()}>Retry</button></div>;
+    return <div>{status}</div>
 };
 
 export default SyncUser;

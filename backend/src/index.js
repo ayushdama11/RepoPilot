@@ -40,6 +40,7 @@ app.use(clerkMiddleware());
 app.use(express.json());
 app.use((req,res,next)=>{
     const { userId } = getAuth(req) || {};
+    // Now, in any controller or route, you can easily get the current user’s ID with req.user.clerkId instead of calling getAuth(req) every time.
     req.user={clerkId:userId};
     next();
 })

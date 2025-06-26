@@ -1,8 +1,21 @@
 // import React from 'react';
 import './landingPage.css';
 import { Link } from 'react-router-dom';
+import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
+  const { isSignedIn } = useUser();
+  const navigate = useNavigate();
+
+  const handleTryClick = () => {
+    if (isSignedIn) {
+      navigate("/dashboard");
+    } else {
+      navigate("/signin");
+    }
+  };
+
   return (
     <div className="landing-container">
       <nav className="navbar">
@@ -31,9 +44,7 @@ const LandingPage = () => {
           <span className="highlight">Pilot</span>
         </h1>
         <p className="subtitle">Navigate your repositories with intelligence and ease</p>
-        <Link to='/dashboard'>
-        <button className="cta-btn">Try AI-Powered RepoPilot</button>
-        </Link>
+        <button className="cta-btn" onClick={handleTryClick}>Try AI-Powered RepoPilot</button>
       </header>
       
       <section className="features">
