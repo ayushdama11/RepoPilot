@@ -14,18 +14,14 @@ export function SignUpComponent() {
   //   },[]);
 
     return(
-        <header>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      
-           <SignUp 
-        path="/signup" 
-        routing="path" 
-        forceRedirectUrl="/sync-user"
-        signInUrl="/signin"
-          />
-        </header>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <SignUp 
+          path="/signup" 
+          routing="path" 
+          forceRedirectUrl="/sync-user"
+          signInUrl="/signin"
+        />
+      </div>
     )
 }
 

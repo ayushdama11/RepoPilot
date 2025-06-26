@@ -18,7 +18,7 @@ export function SignInComponent() {
   }
 
   return (
-    <div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <SignIn path="/signin" routing="path" signUpUrl="/signup" afterSignInUrl="/dashboard" />
     </div>
   );
