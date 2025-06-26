@@ -63,6 +63,14 @@ useEffect(()=>{
 
     return (
         <Sheet>
+            {selectedProject && (
+              <div className="mb-2 p-2 bg-gray-50 border rounded flex items-center gap-2">
+                <span className="font-semibold text-gray-700">Repo:</span>
+                <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-mono">
+                  {selectedProject.name}
+                </a>
+              </div>
+            )}
             <AskQuestionCard/>
             <div className="h-4"></div>
             <h1 className="text-xl font-semibold">Saved Questions</h1>

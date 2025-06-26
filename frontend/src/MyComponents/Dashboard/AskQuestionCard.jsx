@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 import axios from "axios"
 import { useAuth } from "@clerk/clerk-react"
 import useRefetch from "@/hooks/use-refetch"
+import { Loader2 } from "lucide-react"
 
 
 const API_BASEURL=import.meta.env.VITE_BACKEND_API_BASEURL;
@@ -85,7 +86,9 @@ const saveAnswer=async (outputPassed,fileReferencesPassed)=>{
 const handleSave=async(outputPassed,fileReferencesPassed)=>{
     await saveAnswer(outputPassed,fileReferencesPassed);
 }
-//contitnue
+
+const MAX_QUESTION_LENGTH = 200;
+
     return (
         <>
      <Dialog open={open} onOpenChange={setOpen}>

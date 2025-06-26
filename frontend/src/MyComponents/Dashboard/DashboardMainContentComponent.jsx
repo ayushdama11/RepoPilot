@@ -11,24 +11,25 @@ import TeamMembers from "./TeamMembers";
 function DashboardMainContentComponent() {
   const { selectedProject,isLoading } = useProject();
 
-
-
   return (
     <div>
      <div className="flex items-center justify-between flex-wrap gap-y-4">
         {/* github Link */}
-      <div className="w-fit rounded-md bg-primary px-4 py-3">
-        <div className="flex items-center">
-          <Github className="size-5 text-white"/>
-          <div className="ml-2">
-            <p className="text-sm font-medium text-white">
-              This Project is linked to {' '}
-              <Link to={selectedProject?.githubUrl ?? ""} className="inline-flex items-center text-white/80 hover:underline">
-              {selectedProject?.githubUrl}
-              <ExternalLink classNeme='ml-1 size-4' />
-              </Link>
-            </p>
-          </div>
+      <div className="w-fit rounded-md bg-gray-50 border px-4 py-3 shadow-sm">
+        <div className="flex items-center gap-2">
+          <Github className="size-5 text-gray-700"/>
+          <span className="font-semibold text-gray-700">Linked GitHub Repo:</span>
+          {selectedProject?.githubUrl && (
+            <a
+              href={selectedProject.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-blue-600 hover:underline font-mono"
+            >
+              {selectedProject.githubUrl.split('/').slice(-2).join('/')}
+              <ExternalLink className="ml-1 size-4" />
+            </a>
+          )}
         </div>
       </div>
 
@@ -42,10 +43,7 @@ function DashboardMainContentComponent() {
      </div>
      
      <div className="mt-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
-          <AskQuestionCard/>
-          MeetingCard
-        </div>
+        <AskQuestionCard/>
       </div>
       <div className="mt-8"></div>
       <CommitDisplay/>
