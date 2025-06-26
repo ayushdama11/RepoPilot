@@ -16,7 +16,7 @@ import {
 import useProject from "@/hooks/use-project";
 import clsx from "clsx";
 import { Bot, CreditCard, LayoutDashboard, Plus, Presentation, Trash } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { QueryClient } from "@tanstack/react-query";
 import { useSelectedProjectContext } from "@/hooks/selectProjectProvider";
 import { toast } from "react-toastify";
@@ -47,6 +47,7 @@ function AppSidebarComponent() {
     const queryClient=new QueryClient();
     const { selectedProjectId,setProjectId } = useSelectedProjectContext();
     const { getToken } = useAuth();
+    const navigate = useNavigate();
 
     const deleteProject = async (projectId, projectName) => {
       if(window.confirm(`Are you sure you want to permanently delete the project '${projectName}'? This action cannot be undone.`)) {
@@ -123,9 +124,9 @@ function AppSidebarComponent() {
                   return(
                     <SidebarMenuItem key={project.id}>
                       <SidebarMenuButton asChild>
-                        <div className="flex items-center justify-between w-full" onClick={() => setProjectId(project.id)}>
+                        <div className="flex items-center justify-between w-full group cursor-pointer" onClick={() => { setProjectId(project.id); navigate('/dashboard'); }}>
                           <div className={clsx(
-                            'rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary',{
+                            'rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary transition-transform duration-200 group-hover:scale-110 cursor-pointer',{
                               '!bg-primary !text-white' : project.id ===selectedProjectId
                             }
                           )}>
