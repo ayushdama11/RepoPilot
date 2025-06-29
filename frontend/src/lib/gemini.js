@@ -83,8 +83,8 @@ export async function generateEmbedding(summary){
         })
         const result=await model.embedContent(summary)
         const embedding=result.embedding
-        
-        console.log('✅ [DEBUG] Embedding generated successfully, length:', embedding.length);
+        console.log('Embedding object:', embedding);
+        console.log('✅ [DEBUG] Embedding generated successfully, values length:', embedding?.values?.length);
         return embedding.values
     } catch (error) {
         console.error('❌ [DEBUG] Error generating embedding:', error);

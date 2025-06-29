@@ -78,6 +78,10 @@ export function useAskQuestion(question,projectId){
                 - Give step-by-step instructions when appropriate
                 - Suggest improvements and optimizations
 
+                IMPORTANT:
+                - Never say you do not have access to the internet or files. Only answer based on the provided context and information.
+                - If the answer is not in the context, provide your best guidance based on the context and your knowledge of codebases.
+
                 CONTEXT FROM CODEBASE:
                 ${context}
 
@@ -92,6 +96,7 @@ export function useAskQuestion(question,projectId){
                 - Use markdown formatting with code snippets when helpful
                 - Be specific about file locations and code patterns
                 - If you can't answer the specific question, provide related information that might help
+                - Never say you cannot access the internet or files; always answer based on the context provided.
 
                 Remember: You're helping developers understand and work with this codebase. Always try to provide useful insights, even if the exact answer isn't in the provided context.
                 `
@@ -182,6 +187,10 @@ const askQuestion = async (question) => {
           - Give step-by-step instructions when appropriate
           - Suggest improvements and optimizations
 
+          IMPORTANT:
+          - Never say you do not have access to the internet or files. Only answer based on the provided context and information.
+          - If the answer is not in the context, provide your best guidance based on the context and your knowledge of codebases.
+
           CONTEXT FROM CODEBASE:
           ${context}
 
@@ -196,6 +205,7 @@ const askQuestion = async (question) => {
           - Use markdown formatting with code snippets when helpful
           - Be specific about file locations and code patterns
           - If you can't answer the specific question, provide related information that might help
+          - Never say you cannot access the internet or files; always answer based on the context provided.
 
           Remember: You're helping developers understand and work with this codebase. Always try to provide useful insights, even if the exact answer isn't in the provided context.
           `
