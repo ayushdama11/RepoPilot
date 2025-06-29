@@ -2,7 +2,7 @@ import { Router } from "express";
 const router=Router();
 
 import syncUserController from "../controller/syncUserController.js";
-import { createProjectController } from "../controller/createProjectController.js";
+import createProjectController from "../controller/createProjectController.js";
 // import { requireAuth } from "@clerk/express";
 import { auth } from "../middlewares/auth.js";
 import { getAuth, requireAuth } from "@clerk/express";
