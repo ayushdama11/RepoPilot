@@ -112,12 +112,12 @@ for(let i=0;i<docs.length;i+=batchSize){
     const batch=docs.slice(i,i+batchSize);
 
     try{
-        const summarizes=await summarizeCode(batch.join("\n\n"));
-        const summaryList = summarizes.split(/\*\s+/).filter(Boolean);
+        // Call summarizeCode for each doc in the batch
+        const summaryList = await Promise.all(batch.map(doc => summarizeCode(doc)));
 
-        batch.forEach((summary,index)=>{
-            summaryResponses.push({status:"fulfilled",
-                value:summaryList[index] || ""
+        batch.forEach((summary, index) => {
+            summaryResponses.push({status: "fulfilled",
+                value: summaryList[index] || ""
             });
         })
     }

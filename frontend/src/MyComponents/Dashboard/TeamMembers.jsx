@@ -12,9 +12,8 @@ const {getToken}=useAuth();
 const [members,setMembers]=useState([]);
 
     const helper=async()=>{
-
+        if (!selectedProject || !selectedProject.id) return;
         const token=await getToken();
-
         const response=await axios.get(`${API_BASEURL}/teammembers/${selectedProject.id}`,{
             headers:{
                 "Content-Type":"application/json",

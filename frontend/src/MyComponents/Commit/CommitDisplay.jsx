@@ -56,7 +56,7 @@ const CommitDisplay=()=>{
         const pullNewCommits=async ()=>{
             const token=await getToken();
 
-            await pullCommits(selectedProject.id,token);   // maybe optimization needed here
+            await pullCommits(selectedProject.id, getToken);
         }
 
         if(selectedProject){
