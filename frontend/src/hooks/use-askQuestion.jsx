@@ -44,28 +44,51 @@ export function useAskQuestion(question,projectId){
                 context+=`source: ${doc.fileName}\ncode content: ${doc.sourceCode}\n summary of file: ${doc.summary}\n\n`
             }
 
+            // Add project context if available
+            let projectContext = '';
+            if (result.data.project) {
+                projectContext = `\nPROJECT: ${result.data.project.name}\nGITHUB URL: ${result.data.project.githubUrl}\n`;
+            }
+
             const {textStream}=await streamText({
                 model: google('gemini-1.5-flash'),
                 prompt: `
-                You are a ai code assistant who answers questions about the codebase. Your target audience is a technical interns
-        AI assistant is a brand new, powerful, human-like artificial intelligence.
-        The traits of AI include expert knowledge, helpfulness. cleverness, and articulateness.
-        AI is a well -behaved and well-mannered individual .
-        AI is always friendly, kind, and inspiring, and he is eager to provide vivid and thoughtful responses to the user.
-        AI has the sum of all knowledge in their brain, and is able to accurately answer nearly any question about any topic.
-        If the question is asking about code or a specific file. AI will provide the detailed answer, giving step by step instruction.
-        START CONTEXT BLOCK
-        ${context}
-        END OF CONTEXT BLOCK
-        START QUESTION
-        ${question}
-        END OF QUESTION
-        AI assistant will take into account any CONTEXT BLOCK that is provided in a conversation.
-        If the context does not provide the answer to question. the AI assistant will say, - I'm sorry,
-        but I don't know the answer to this question. Please Provide more context!
-        AI assistant will not apologize for previous responses, but instead will indiacted new information was gained.
-        AI assistant will not invent anything that is not drawn directly from the context.
-        Answer in markdown syntax, with code snippets if needed. Be as detailed as possible when answering.
+                You are an expert AI code assistant helping developers understand and work with the RepoPilot codebase. 
+
+                REPO PILOT PROJECT CONTEXT:
+                - This is a full-stack AI-powered developer collaboration platform
+                - Frontend: React.js with Vite, ShadCN UI, Tailwind CSS
+                - Backend: Express.js with Node.js
+                - Database: PostgreSQL (Neon) with pgvector for embeddings
+                - Authentication: Clerk
+                - AI: Google Gemini API for code analysis and embeddings
+                - Payment: Razorpay integration
+                - Repository: https://github.com/ayushdama11/RepoPilot
+                ${projectContext}
+
+                YOUR ROLE:
+                - Provide detailed, actionable answers about the codebase
+                - Explain code structure, patterns, and implementation details
+                - Help with debugging, feature implementation, and best practices
+                - Give step-by-step instructions when appropriate
+                - Suggest improvements and optimizations
+
+                CONTEXT FROM CODEBASE:
+                ${context}
+
+                USER QUESTION:
+                ${question}
+
+                INSTRUCTIONS:
+                - If the context provides relevant information, give a comprehensive answer
+                - If the context is limited but you can provide general guidance, do so
+                - If you need more specific information, ask for clarification about which part of the codebase they're interested in
+                - Always provide value - explain concepts, suggest approaches, or guide them to relevant files
+                - Use markdown formatting with code snippets when helpful
+                - Be specific about file locations and code patterns
+                - If you can't answer the specific question, provide related information that might help
+
+                Remember: You're helping developers understand and work with this codebase. Always try to provide useful insights, even if the exact answer isn't in the provided context.
                 `
                 
             });
