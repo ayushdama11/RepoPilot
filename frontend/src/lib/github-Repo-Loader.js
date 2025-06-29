@@ -3,6 +3,7 @@ import { generateEmbedding, summarizeCode } from './gemini'
 import axios from 'axios'
 import { Octokit } from 'octokit'
 import { octokit } from './github'
+import { apiClient } from './utils'
 
 
 const API_BASEURL=import.meta.env.VITE_BACKEND_API_BASEURL;
@@ -73,29 +74,34 @@ return docs;
 }
 
 export const indexGithubRepo=async(githubUrl,githubToken,token,projectId)=>{
-    const docs=await loadGithubRepo(githubUrl,githubToken)
-    const allEmbeddings = await generateEmbeddings(docs); 
+    try {
+        const docs=await loadGithubRepo(githubUrl,githubToken)
+        const allEmbeddings = await generateEmbeddings(docs); 
 
-const processedEmbeddings = await Promise.all(
-    allEmbeddings.map(async (embedding) => ({
-        summary: embedding.summary,
-        sourceCode: embedding.sourceCode,
-        fileName: embedding.fileName,
-        projectId:projectId,
-        embedding: embedding.embedding
-    }))
-);
+        const processedEmbeddings = await Promise.all(
+            allEmbeddings.map(async (embedding) => ({
+                summary: embedding.summary,
+                sourceCode: embedding.sourceCode,
+                fileName: embedding.fileName,
+                projectId:projectId,
+                embedding: embedding.embedding
+            }))
+        );
 
-const embedds = await axios.post(`${API_BASEURL}/addEmbeddings`, {
-    embeddings: processedEmbeddings 
-}, {
-    headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        const embedds = await apiClient.post(`${API_BASEURL}/addEmbeddings`, {
+            embeddings: processedEmbeddings 
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return embedds.data;
+    } catch (error) {
+        console.error('Error in indexGithubRepo:', error);
+        throw error;
     }
-});
-
-    return embedds.data;
 }
 
 const generateEmbeddings=async (docs)=>{

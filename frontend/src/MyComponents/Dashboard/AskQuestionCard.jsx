@@ -1,7 +1,7 @@
 // import readStreana
 import {Button} from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card" 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import useProject from "@/hooks/use-project"
 import { useState } from "react"
@@ -95,9 +95,14 @@ const MAX_QUESTION_LENGTH = 200;
         <DialogContent className='sm:max-w-[80vw] flex flex-col h-[80vh] p-0'>
             {/* Sticky Header */}
             <div className="flex items-center justify-between gap-2 p-4 border-b bg-background sticky top-0 z-10">
-                <DialogTitle>
-                    <img src='logo.png'  alt='Repo-Pilot' width={40} height={40}/>
-                </DialogTitle>
+                <DialogHeader>
+                    <DialogTitle>
+                        <img src='logo.png'  alt='Repo-Pilot' width={40} height={40}/>
+                    </DialogTitle>
+                    <DialogDescription>
+                        AI-powered answer to your question about the codebase
+                    </DialogDescription>
+                </DialogHeader>
                 <Button variant={'outline'} onClick={()=>{handleSave(output,fileReferences)}}> Save Answer</Button>
             </div>
             {/* Scrollable Content */}
