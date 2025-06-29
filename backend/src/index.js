@@ -38,7 +38,15 @@ app.use((req, res, next) => {
     next();
   });
   
-app.use(clerkMiddleware());
+app.use(
+  clerkMiddleware({
+    authorizedParties: [
+      'https://repo-pilot-seven.vercel.app',
+      'http://localhost:5173',
+      // Add more domains if needed
+    ],
+  })
+);
 app.use(express.json());
 app.use((req,res,next)=>{
     const { userId } = getAuth(req) || {};

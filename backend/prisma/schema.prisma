@@ -99,7 +99,7 @@ model Question{
   project Project @relation(fields:[projectId],references:[id])
 
   userId String
-  user User @relation(fields:[userId],references:[clerkId])
+  user User @relation(fields:[userId],references:[clerkId], onDelete: Cascade)
 }
 
 model Commit {
