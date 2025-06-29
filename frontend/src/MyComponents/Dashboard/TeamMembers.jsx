@@ -12,12 +12,7 @@ const {getToken}=useAuth();
 const [members,setMembers]=useState([]);
 
     const helper=async()=>{
-<<<<<<< HEAD
-        if (!selectedProject || !selectedProject.id) return;
-=======
         if (!selectedProject?.id) return;
-
->>>>>>> 32d400249f5935851fd7a455684ea5cdc839486b
         const token=await getToken();
         const response=await axios.get(`${API_BASEURL}/teammembers/${selectedProject.id}`,{
             headers:{
