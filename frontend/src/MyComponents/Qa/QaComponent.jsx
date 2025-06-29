@@ -29,6 +29,7 @@ const formattedDate = question?.createdAt
 
 
     const getQuestions=async()=>{
+        if (!selectedProject?.id) return; // Add null check
 
         try{
             const token=await getToken();

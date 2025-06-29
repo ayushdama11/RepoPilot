@@ -10,23 +10,25 @@ dotenv.config();
 const app=express();
 const PORT=process.env.PORT || 5000;
 
-
-// app.use(cors({
-//     origin: "*",
-//     methods: "GET,POST,PUT,DELETE",
-//     credentials:false,
-// }));
-
+// Updated CORS configuration for Vercel deployment
 app.use(cors({
-    origin: "https://repopilot.netlify.app",
+    origin: ["https://repo-pilot-seven.vercel.app", "http://localhost:5173", "https://repopilot.netlify.app"],
     methods: "GET,POST,PUT,DELETE,OPTIONS",
     allowedHeaders: "Content-Type, Authorization",
+    credentials: true
 }));
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://repopilot.netlify.app");
+    const allowedOrigins = ["https://repo-pilot-seven.vercel.app", "http://localhost:5173"];
+    const origin = req.headers.origin;
+    
+    if (allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin);
+    }
+    
     res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
     
     // Allow preflight responses
     if (req.method === "OPTIONS") {
@@ -36,11 +38,19 @@ app.use((req, res, next) => {
     next();
   });
   
-app.use(clerkMiddleware());
+app.use(
+  clerkMiddleware({
+    authorizedParties: [
+      'https://repo-pilot-seven.vercel.app',
+      'http://localhost:5173',
+      // Add more domains if needed
+    ],
+  })
+);
 app.use(express.json());
 app.use((req,res,next)=>{
     const { userId } = getAuth(req) || {};
-    // Now, in any controller or route, you can easily get the current user’s ID with req.user.clerkId instead of calling getAuth(req) every time.
+    // Now, in any controller or route, you can easily get the current user's ID with req.user.clerkId instead of calling getAuth(req) every time.
     req.user={clerkId:userId};
     next();
 })

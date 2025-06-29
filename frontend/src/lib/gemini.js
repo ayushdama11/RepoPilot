@@ -75,12 +75,21 @@ Do not include parts of the example in your summary. It is given only as an exam
 }
 
 export async function generateEmbedding(summary){
-    const model=genAI.getGenerativeModel({
-        model:"text-embedding-004"
-    })
-    const result=await model.embedContent(summary)
-    const embedding=result.embedding
-    return embedding.values
+    console.log('🧠 [DEBUG] generateEmbedding called with text length:', summary?.length || 0);
+    
+    try {
+        const model=genAI.getGenerativeModel({
+            model:"text-embedding-004"
+        })
+        const result=await model.embedContent(summary)
+        const embedding=result.embedding
+        console.log('Embedding object:', embedding);
+        console.log('✅ [DEBUG] Embedding generated successfully, values length:', embedding?.values?.length);
+        return embedding.values
+    } catch (error) {
+        console.error('❌ [DEBUG] Error generating embedding:', error);
+        throw error;
+    }
 }
 
 // console.log(await generateEmbedding("hello World"));

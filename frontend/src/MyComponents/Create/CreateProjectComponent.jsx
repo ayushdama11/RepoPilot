@@ -20,6 +20,8 @@ const CreateProjectComponent=()=>{
     const [creditsBalance,setCreditBalance]=useState(null);
     const [creditNeeded,setCreditNeeded]=useState(null);
     const [hasEnoughCreditsState,setHasEnough]=useState(true);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     // const {projects,fetchAllProjects}=useProject();
     const {isLoading}=useProject();
@@ -74,6 +76,7 @@ const {getToken}=useAuth();
     const createProject=async (data)=>{
         try{
             const token=await getToken();
+            
             const response =await axios.post(`${API_BASEURL}/create-project`,{
             projectName:data.projectName,
             repoUrl:data.repoUrl,
@@ -87,28 +90,21 @@ const {getToken}=useAuth();
           },
     });
 
-    // console.log(response);
-
     
     if(response.status===200){
 
-        // console.log("refetching...");
-        
-        // await refetch()
         await queryClient.invalidateQueries({queryKey:['projects']});
         toast.success('Project created successfully!');
       
         reset();
-        // console.log('fetching and adding commits...');
         await pullCommits(response.data.project.id,getToken);
         await indexGithubRepo(data.repoUrl,data.githubToken,token,response.data.project.id);
 
     }
     
-    // console.log("response: ",JSON.stringify(response.data));
-
     }
     catch(error){
+        console.error('Error in createProject:', error);
         if (error.response) {
             console.error("Error response:", error.response.data);
             toast.error('Unable to create project');
@@ -124,13 +120,11 @@ const {getToken}=useAuth();
 
 
     function onSubmit(data){
-        // window.alert(JSON.stringify(data))
       
         if(creditsBalance && creditNeeded){
              createProject(data);
             }
             else{
-              
                 getCredits();
                 const creditNeed=checkCredits(data.repoUrl,data.githubToken);
                 setCreditNeeded(creditNeed);
@@ -138,9 +132,6 @@ const {getToken}=useAuth();
                 setHasEnough(hasEnoughCredits);
                 
             }
-            // console.log("Credit Needed:", creditNeeded);
-            // console.log("Credits Balance:", creditsBalance);
-            // console.log("Has Enough Credits:", hasEnoughCreditsState);
 
     }
 
