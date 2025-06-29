@@ -19,7 +19,16 @@ if (!PUBLISHABLE_KEY) {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
   
-       <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/signup">
+       <ClerkProvider 
+         publishableKey={PUBLISHABLE_KEY} 
+         afterSignOutUrl="/signup"
+         appearance={{
+           elements: {
+             formButtonPrimary: 'bg-blue-500 hover:bg-blue-600',
+             card: 'shadow-lg',
+           }
+         }}
+       >
     <BrowserRouter>
     <QueryClientProvider client={queryClient}>
     <SelectedProjectProvider>
