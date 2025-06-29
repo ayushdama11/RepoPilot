@@ -15,6 +15,8 @@ const CommitDisplay=()=>{
     const [commitsToDisplay,setCommitsToDisplay]=useState([]);
 
     const getCommits=async ()=>{
+        if (!selectedProject?.id) return;
+        
         try{
             const token=await getToken();
             const response=await axios.get(`${API_BASEURL}/getCommits/${selectedProject?.id}`,
@@ -54,6 +56,8 @@ const CommitDisplay=()=>{
     
     useEffect(()=>{
         const pullNewCommits=async ()=>{
+            if (!selectedProject?.id) return;
+            
             const token=await getToken();
 
             await pullCommits(selectedProject.id,token);   // maybe optimization needed here

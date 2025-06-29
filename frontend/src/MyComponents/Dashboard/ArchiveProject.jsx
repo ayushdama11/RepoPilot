@@ -18,6 +18,11 @@ const ArchiveProject = () => {
     const queryClient=useQueryClient();
 
     const archive = async () => {
+        if (!selectedProject?.id) {
+            toast.error("No project selected!");
+            return;
+        }
+
         try {
             setIsArchiving(true); 
             const token = await getToken();

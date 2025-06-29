@@ -18,7 +18,7 @@ const SyncUser=()=>{
     
     const {isSignedIn,user}=useUser();
     // const {userId}=useAuth();    
-    const userId=user.id;
+    const userId=user?.id;
     console.log("user id: ",userId);
     
 
@@ -27,7 +27,7 @@ const SyncUser=()=>{
     
     
     useEffect(()=>{
-        if(isSignedIn && user){
+        if(isSignedIn && user && user.id){
             const syncUser=async()=>{
                 setLoading(true);
                 setError(null);
@@ -67,7 +67,7 @@ const SyncUser=()=>{
             };
             syncUser();
         }
-        else{
+        else if(!isSignedIn){
             setStatus('Not signed in. Redirecting to sign-in...');
             setLoading(false);
             navigate('/signin');

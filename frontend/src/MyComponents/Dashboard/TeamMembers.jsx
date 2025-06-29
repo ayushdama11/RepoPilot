@@ -12,6 +12,7 @@ const {getToken}=useAuth();
 const [members,setMembers]=useState([]);
 
     const helper=async()=>{
+        if (!selectedProject?.id) return;
 
         const token=await getToken();
 
