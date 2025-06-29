@@ -1,34 +1,34 @@
-
 import { getAuth,clerkClient } from '@clerk/express';
 import prisma from '../prismaClient.js';
 
-export const createProjectController=async (req,res)=>{
-    const {projectName,repoUrl,githubToken,creditNeeded}=req.body;
-    const {userId}=getAuth(req);
-    console.log('create',userId);
-    
+const createProject = async (req, res) => {
+  try {
+    const { projectName, repoUrl, githubToken, creditNeeded } = req.body;
+    const userId = req.user.id;
 
-  
-    // res.json({user});
-    const project=await prisma.project.create({
-        data:{
-          name:projectName,
-          githubUrl:repoUrl,
-          userToProjects:{
-            create:{
-                user:{connect:{clerkId:userId}}
-            }
-          }
-        }
+    if (!projectName || !repoUrl) {
+      return res.status(400).json({ error: "Project name and repository URL are required" });
+    }
+
+    const project = await prisma.project.create({
+      data: {
+        name: projectName,
+        githubUrl: repoUrl,
+        userId: userId,
+        creditNeeded: creditNeeded || 0
+      }
     });
 
-    const userUpdated=await prisma.user.update({
-      where:{clerkId:userId},data:{
-        credits:{decrement:creditNeeded}
-      }
-    })
-    return res.status(200).json({ project })
-    
-}
+    res.status(201).json({ 
+      message: "Project created successfully", 
+      project 
+    });
+  } catch (error) {
+    console.error("Error creating project:", error);
+    res.status(500).json({ error: "Failed to create project" });
+  }
+};
+
+export default createProject;
 
 

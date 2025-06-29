@@ -20,6 +20,7 @@ const API_BASEURL=import.meta.env.VITE_BACKEND_API_BASEURL;
 const AskQuestionCard=()=>{
 
     const [saved, setSaved] = useState(false);
+    const [error, setError] = useState("");
 
     const {selectedProject}=useProject();
     const [open,setOpen]=useState(false);
