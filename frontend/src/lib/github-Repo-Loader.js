@@ -1,7 +1,6 @@
 import {GithubRepoLoader} from '@langchain/community/document_loaders/web/github'
 import { generateEmbedding, summarizeCode } from './gemini'
 import axios from 'axios'
-import { Octokit } from 'octokit'
 import { octokit } from './github'
 import { apiClient } from './utils'
 
@@ -9,9 +8,9 @@ import { apiClient } from './utils'
 const API_BASEURL=import.meta.env.VITE_BACKEND_API_BASEURL;
 
 
-const getFileCount=async (path,octokit,githubOwner,githubRepo,acc=0)=>{
+const getFileCount=async (path,octokitInstance,githubOwner,githubRepo,acc=0)=>{
 
-    const {data}=await octokit.rest.repos.getContent({
+    const {data}=await octokitInstance.rest.repos.getContent({
         owner:githubOwner,
         repo:githubRepo,
         path
@@ -21,7 +20,7 @@ const getFileCount=async (path,octokit,githubOwner,githubRepo,acc=0)=>{
         return acc+1;
     }
 
-    if(Array.isArray(data)){
+    if(Array.isArray(data)){y
         let fileCount=0;
         const directories=[];
 
@@ -35,7 +34,7 @@ const getFileCount=async (path,octokit,githubOwner,githubRepo,acc=0)=>{
         }
         if(directories.length>0){
             const directoryCounts=await Promise.all(
-                directories.map(dirPath=> getFileCount(dirPath,octokit,githubOwner,githubRepo,0))
+                directories.map(dirPath=> getFileCount(dirPath,octokitInstance,githubOwner,githubRepo,0))
             )
             fileCount+=directoryCounts.reduce((acc,count)=> acc+count,0);
         }
@@ -47,14 +46,13 @@ const getFileCount=async (path,octokit,githubOwner,githubRepo,acc=0)=>{
 
 
 export const checkCredits=async (githubUrl,githubToken)=>{
-    const ocktokit=new Octokit({ auth: import.meta.env.VITE_GITHUB_TOKEN,});
     const githubOwner=githubUrl.split('/')[3];
     const githubRepo=githubUrl.split('/')[4];
     if(!githubOwner || !githubRepo){
         return 0; 
     }
 
-    const fileCount=await getFileCount('',ocktokit,githubOwner,githubRepo,0);
+    const fileCount=await getFileCount('',octokit,githubOwner,githubRepo,0);
     return fileCount;
 }
 
